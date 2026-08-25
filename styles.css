@@ -25,6 +25,7 @@ body {
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
+main { position: relative; z-index: 1; }
 
 /* Floating centered glass pill + quiet filters underneath */
 .nav {
@@ -178,18 +179,19 @@ a { color: inherit; }
   height: auto;
 }
 
-/* Movement sits behind the hero only; clipped so it never covers tiles */
+/* Movement is a fixed, scroll-driven layer: strong in the hero, faint over the grid */
 .movement {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: 58%;
-  width: min(920px, 165vw);
-  height: min(920px, 165vw);
+  top: 38%;
+  width: min(980px, 170vw);
+  height: min(980px, 170vw);
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 0;
   color: var(--ink);
-  opacity: 0.12;
+  opacity: 0.14;
+  will-change: transform, opacity;
 }
 .movement svg {
   display: block;
@@ -209,39 +211,39 @@ a { color: inherit; }
 }
 .mv-rotor {
   transform-origin: 400px 400px;
-  animation: mv-spin 42s linear infinite;
+  animation: none;
 }
 .mv-balance {
   transform-origin: 572px 214px;
-  animation: mv-osc 0.25s ease-in-out infinite;
+  animation: none;
 }
 .mv-escape {
   transform-origin: 512px 332px;
-  animation: mv-tick 3.75s steps(15) infinite;
+  animation: none;
 }
 .mv-fourth {
   transform-origin: 400px 548px;
-  animation: mv-tick 60s steps(60) infinite;
+  animation: none;
 }
 .mv-third {
   transform-origin: 508px 478px;
-  animation: mv-tick 8.4s steps(30) infinite;
+  animation: none;
 }
 .mv-center {
   transform-origin: 400px 400px;
-  animation: mv-spin 54s linear infinite;
+  animation: none;
 }
 .mv-barrel {
   transform-origin: 268px 388px;
-  animation: mv-spin 96s linear infinite;
+  animation: none;
 }
 .mv-pinion {
   transform-origin: 698px 400px;
-  animation: mv-spin 16s linear infinite;
+  animation: none;
 }
 .mv-crown {
   transform-origin: 783px 400px;
-  animation: mv-spin 22s linear infinite;
+  animation: none;
 }
 @keyframes mv-spin {
   to { transform: rotate(360deg); }
@@ -287,19 +289,20 @@ a { color: inherit; }
   width: 100%;
 }
 .tile-photo {
-  background: var(--card);
-  border-radius: 22px;
+  background: radial-gradient(circle at 50% 46%, rgba(17, 0, 0, 0.038) 0%, rgba(17, 0, 0, 0.012) 40%, transparent 68%);
+  border-radius: 50%;
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: 0 1px 0 rgba(17, 0, 0, 0.04);
+  box-shadow: none;
 }
 .tile-photo img {
-  width: 86%;
-  height: 86%;
+  width: 94%;
+  height: 94%;
   object-fit: contain;
+  object-position: center;
   transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .tile:hover .tile-photo img { transform: scale(1.03); }
@@ -512,4 +515,16 @@ body.is-one .hint:hover { color: var(--cream); }
   .mv-crown {
     animation: none !important;
   }
+}
+
+body.reduce-motion .mv-rotor,
+body.reduce-motion .mv-balance,
+body.reduce-motion .mv-escape,
+body.reduce-motion .mv-fourth,
+body.reduce-motion .mv-third,
+body.reduce-motion .mv-center,
+body.reduce-motion .mv-barrel,
+body.reduce-motion .mv-pinion,
+body.reduce-motion .mv-crown {
+  animation: none !important;
 }
