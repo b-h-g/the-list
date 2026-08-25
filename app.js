@@ -406,4 +406,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initHash();
   initToTop();
   boot();
+  if (typeof initClock === "function") initClock();
 });

@@ -137,10 +137,19 @@ a { color: inherit; }
 }
 
 .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 88px 28px 48px;
+  padding: 72px 28px 56px;
   text-align: center;
+}
+.hero h1,
+.hero .whisper,
+.hero .live-watch {
+  position: relative;
+  z-index: 1;
 }
 .hero h1 {
   margin: 0;
@@ -154,6 +163,95 @@ a { color: inherit; }
   color: var(--mute);
   font-size: 18px;
   letter-spacing: -0.02em;
+}
+
+/* Live analog watch — cream / ink, no brand, no gold */
+.live-watch {
+  width: min(280px, 70vw);
+  margin: 36px auto 0;
+  color: var(--ink);
+  filter: drop-shadow(0 10px 24px rgba(17, 0, 0, 0.06));
+}
+.live-watch svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Movement sits behind the hero only; clipped so it never covers tiles */
+.movement {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: min(920px, 165vw);
+  height: min(920px, 165vw);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  color: var(--ink);
+  opacity: 0.12;
+}
+.movement svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.mv-rotor,
+.mv-balance,
+.mv-escape,
+.mv-fourth,
+.mv-third,
+.mv-center,
+.mv-barrel,
+.mv-pinion,
+.mv-crown {
+  transform-box: view-box;
+}
+.mv-rotor {
+  transform-origin: 400px 400px;
+  animation: mv-spin 42s linear infinite;
+}
+.mv-balance {
+  transform-origin: 572px 214px;
+  animation: mv-osc 0.25s ease-in-out infinite;
+}
+.mv-escape {
+  transform-origin: 512px 332px;
+  animation: mv-tick 3.75s steps(15) infinite;
+}
+.mv-fourth {
+  transform-origin: 400px 548px;
+  animation: mv-tick 60s steps(60) infinite;
+}
+.mv-third {
+  transform-origin: 508px 478px;
+  animation: mv-tick 8.4s steps(30) infinite;
+}
+.mv-center {
+  transform-origin: 400px 400px;
+  animation: mv-spin 54s linear infinite;
+}
+.mv-barrel {
+  transform-origin: 268px 388px;
+  animation: mv-spin 96s linear infinite;
+}
+.mv-pinion {
+  transform-origin: 698px 400px;
+  animation: mv-spin 16s linear infinite;
+}
+.mv-crown {
+  transform-origin: 783px 400px;
+  animation: mv-spin 22s linear infinite;
+}
+@keyframes mv-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes mv-osc {
+  0%, 100% { transform: rotate(-50deg); }
+  50% { transform: rotate(50deg); }
+}
+@keyframes mv-tick {
+  to { transform: rotate(360deg); }
 }
 
 .grid {
@@ -260,7 +358,8 @@ body.is-one {
 }
 body.is-one .hero,
 body.is-one .grid,
-body.is-one .foot { display: none; }
+body.is-one .foot,
+body.is-one .movement { display: none; }
 body.is-one .totop { display: none; }
 body.is-one .nav {
   background: linear-gradient(to bottom, #110000 62%, rgba(17, 0, 0, 0));
@@ -388,7 +487,9 @@ body.is-one .hint:hover { color: var(--cream); }
   .nav-pill { gap: 9px; padding: 8px 14px 8px 16px; }
   .mark { font-size: 14px; }
   .view-btn { font-size: 12px; }
-  .hero { padding: 56px 16px 32px; }
+  .hero { padding: 48px 16px 36px; }
+  .live-watch { width: min(208px, 64vw); margin-top: 26px; }
+  .movement { width: min(640px, 180vw); height: min(640px, 180vw); }
   .grid { padding: 8px 16px 88px; gap: 40px 14px; }
   .stage { padding: 8px 12px 72px; }
   .stage-photo {
@@ -396,4 +497,19 @@ body.is-one .hint:hover { color: var(--cream); }
     height: min(52vh, 480px);
   }
   .chevron { font-size: 28px; width: 24px; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .mv-rotor,
+  .mv-balance,
+  .mv-escape,
+  .mv-fourth,
+  .mv-third,
+  .mv-center,
+  .mv-barrel,
+  .mv-pinion,
+  .mv-crown {
+    animation: none !important;
+  }
 }

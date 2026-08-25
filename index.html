@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The List — Benjamin Gruber</title>
   <meta name="description" content="Forty-four watches. A personal list by Benjamin Gruber.">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
   <header class="nav">
@@ -38,8 +38,94 @@
 
   <main id="top">
     <section class="hero">
+      <div class="movement" aria-hidden="true"></div>
       <h1>The List</h1>
       <p class="whisper">Forty-four watches.</p>
+      <div class="live-watch" role="img" aria-label="Local time">
+        <svg class="clock-face" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <!-- original dress face: cream / ink, no brand -->
+  <circle cx="120.000" cy="120.000" r="117.200" fill="none" stroke="currentColor" stroke-width="1.15"/>
+  <circle cx="120.000" cy="120.000" r="112.400" fill="none" stroke="currentColor" stroke-width="0.35" opacity="0.35"/>
+  <circle cx="120.000" cy="120.000" r="108.600" fill="#FDFBEE" stroke="currentColor" stroke-width="0.4"/>
+  <path class="crown" d="M228.6,112.2 h7.2 c1.4,0 2.4,1.1 2.4,2.4 v10.8 c0,1.3 -1,2.4 -2.4,2.4 h-7.2 z" fill="none" stroke="currentColor" stroke-width="1.05"/>
+  <path d="M227.2,116.4 h2.2 M227.2,120 h2.2 M227.2,123.6 h2.2" fill="none" stroke="currentColor" stroke-width="0.7"/>
+  <g class="ticks" fill="none" stroke="currentColor">
+    <line x1="120.000" y1="34.000" x2="120.000" y2="17.500" stroke-width="2.15" stroke-linecap="butt"/>
+    <line x1="130.192" y1="23.034" x2="130.714" y2="18.062" stroke-width="0.45" opacity="0.55"/>
+    <line x1="140.271" y1="24.631" x2="141.311" y2="19.740" stroke-width="0.45" opacity="0.55"/>
+    <line x1="150.129" y1="27.272" x2="151.674" y2="22.517" stroke-width="0.45" opacity="0.55"/>
+    <line x1="159.657" y1="30.929" x2="161.691" y2="26.362" stroke-width="0.45" opacity="0.55"/>
+    <line x1="165.500" y1="41.192" x2="171.250" y2="31.232" stroke-width="1.35" stroke-linecap="butt"/>
+    <line x1="177.309" y1="41.121" x2="180.248" y2="37.076" stroke-width="0.45" opacity="0.55"/>
+    <line x1="185.240" y1="47.543" x2="188.586" y2="43.828" stroke-width="0.45" opacity="0.55"/>
+    <line x1="192.457" y1="54.760" x2="196.172" y2="51.414" stroke-width="0.45" opacity="0.55"/>
+    <line x1="198.879" y1="62.691" x2="202.924" y2="59.752" stroke-width="0.45" opacity="0.55"/>
+    <line x1="198.808" y1="74.500" x2="208.768" y2="68.750" stroke-width="1.35" stroke-linecap="butt"/>
+    <line x1="209.071" y1="80.343" x2="213.638" y2="78.309" stroke-width="0.45" opacity="0.55"/>
+    <line x1="212.728" y1="89.871" x2="217.483" y2="88.326" stroke-width="0.45" opacity="0.55"/>
+    <line x1="215.369" y1="99.729" x2="220.260" y2="98.689" stroke-width="0.45" opacity="0.55"/>
+    <line x1="216.966" y1="109.808" x2="221.938" y2="109.286" stroke-width="0.45" opacity="0.55"/>
+    <line x1="206.000" y1="120.000" x2="222.500" y2="120.000" stroke-width="2.15" stroke-linecap="butt"/>
+    <line x1="216.966" y1="130.192" x2="221.938" y2="130.714" stroke-width="0.45" opacity="0.55"/>
+    <line x1="215.369" y1="140.271" x2="220.260" y2="141.311" stroke-width="0.45" opacity="0.55"/>
+    <line x1="212.728" y1="150.129" x2="217.483" y2="151.674" stroke-width="0.45" opacity="0.55"/>
+    <line x1="209.071" y1="159.657" x2="213.638" y2="161.691" stroke-width="0.45" opacity="0.55"/>
+    <line x1="198.808" y1="165.500" x2="208.768" y2="171.250" stroke-width="1.35" stroke-linecap="butt"/>
+    <line x1="198.879" y1="177.309" x2="202.924" y2="180.248" stroke-width="0.45" opacity="0.55"/>
+    <line x1="192.457" y1="185.240" x2="196.172" y2="188.586" stroke-width="0.45" opacity="0.55"/>
+    <line x1="185.240" y1="192.457" x2="188.586" y2="196.172" stroke-width="0.45" opacity="0.55"/>
+    <line x1="177.309" y1="198.879" x2="180.248" y2="202.924" stroke-width="0.45" opacity="0.55"/>
+    <line x1="165.500" y1="198.808" x2="171.250" y2="208.768" stroke-width="1.35" stroke-linecap="butt"/>
+    <line x1="159.657" y1="209.071" x2="161.691" y2="213.638" stroke-width="0.45" opacity="0.55"/>
+    <line x1="150.129" y1="212.728" x2="151.674" y2="217.483" stroke-width="0.45" opacity="0.55"/>
+    <line x1="140.271" y1="215.369" x2="141.311" y2="220.260" stroke-width="0.45" opacity="0.55"/>
+    <line x1="130.192" y1="216.966" x2="130.714" y2="221.938" stroke-width="0.45" opacity="0.55"/>
+    <line x1="120.000" y1="206.000" x2="120.000" y2="222.500" stroke-width="2.15" stroke-linecap="butt"/>
+    <line x1="109.808" y1="216.966" x2="109.286" y2="221.938" stroke-width="0.45" opacity="0.55"/>
+    <line x1="99.729" y1="215.369" x2="98.689" y2="220.260" stroke-width="0.45" opacity="0.55"/>
+    <line x1="89.871" y1="212.728" x2="88.326" y2="217.483" stroke-width="0.45" opacity="0.55"/>
+    <line x1="80.343" y1="209.071" x2="78.309" y2="213.638" stroke-width="0.45" opacity="0.55"/>
+    <line x1="74.500" y1="198.808" x2="68.750" y2="208.768" stroke-width="1.35" stroke-linecap="butt"/>
+    <line x1="62.691" y1="198.879" x2="59.752" y2="202.924" stroke-width="0.45" opacity="0.55"/>
+    <line x1="54.760" y1="192.457" x2="51.414" y2="196.172" stroke-width="0.45" opacity="0.55"/>
+    <line x1="47.543" y1="185.240" x2="43.828" y2="188.586" stroke-width="0.45" opacity="0.55"/>
+    <line x1="41.121" y1="177.309" x2="37.076" y2="180.248" stroke-width="0.45" opacity="0.55"/>
+    <line x1="41.192" y1="165.500" x2="31.232" y2="171.250" stroke-width="1.35" stroke-linecap="butt"/>
+    <line x1="30.929" y1="159.657" x2="26.362" y2="161.691" stroke-width="0.45" opacity="0.55"/>
+    <line x1="27.272" y1="150.129" x2="22.517" y2="151.674" stroke-width="0.45" opacity="0.55"/>
+    <line x1="24.631" y1="140.271" x2="19.740" y2="141.311" stroke-width="0.45" opacity="0.55"/>
+    <line x1="23.034" y1="130.192" x2="18.062" y2="130.714" stroke-width="0.45" opacity="0.55"/>
+    <line x1="34.000" y1="120.000" x2="17.500" y2="120.000" stroke-width="2.15" stroke-linecap="butt"/>
+    <line x1="23.034" y1="109.808" x2="18.062" y2="109.286" stroke-width="0.45" opacity="0.55"/>
+    <line x1="24.631" y1="99.729" x2="19.740" y2="98.689" stroke-width="0.45" opacity="0.55"/>
+    <line x1="27.272" y1="89.871" x2="22.517" y2="88.326" stroke-width="0.45" opacity="0.55"/>
+    <line x1="30.929" y1="80.343" x2="26.362" y2="78.309" stroke-width="0.45" opacity="0.55"/>
+    <line x1="41.192" y1="74.500" x2="31.232" y2="68.750" stroke-width="1.35" stroke-linecap="butt"/>
+    <line x1="41.121" y1="62.691" x2="37.076" y2="59.752" stroke-width="0.45" opacity="0.55"/>
+    <line x1="47.543" y1="54.760" x2="43.828" y2="51.414" stroke-width="0.45" opacity="0.55"/>
+    <line x1="54.760" y1="47.543" x2="51.414" y2="43.828" stroke-width="0.45" opacity="0.55"/>
+    <line x1="62.691" y1="41.121" x2="59.752" y2="37.076" stroke-width="0.45" opacity="0.55"/>
+    <line x1="74.500" y1="41.192" x2="68.750" y2="31.232" stroke-width="1.35" stroke-linecap="butt"/>
+    <line x1="80.343" y1="30.929" x2="78.309" y2="26.362" stroke-width="0.45" opacity="0.55"/>
+    <line x1="89.871" y1="27.272" x2="88.326" y2="22.517" stroke-width="0.45" opacity="0.55"/>
+    <line x1="99.729" y1="24.631" x2="98.689" y2="19.740" stroke-width="0.45" opacity="0.55"/>
+    <line x1="109.808" y1="23.034" x2="109.286" y2="18.062" stroke-width="0.45" opacity="0.55"/>
+  </g>
+  <circle cx="120.000" cy="120.000" r="84.500" fill="none" stroke="currentColor" stroke-width="0.28" opacity="0.22"/>
+  <g class="hand-hour">
+    <path d="M118.55,124.5 L118.15,68 L120,61.5 L121.85,68 L121.45,124.5 Z" fill="currentColor"/>
+  </g>
+  <g class="hand-minute">
+    <path d="M119.15,126 L118.7,42 L120,34.5 L121.3,42 L120.85,126 Z" fill="currentColor"/>
+  </g>
+  <g class="hand-second">
+    <path d="M119.62,138 L119.55,32 L120,27.2 L120.45,32 L120.38,138 Z" fill="currentColor"/>
+    <circle cx="120.000" cy="142.000" r="2.150" fill="currentColor"/>
+  </g>
+  <circle cx="120.000" cy="120.000" r="3.150" fill="currentColor"/>
+  <circle cx="120.000" cy="120.000" r="1.350" fill="#FDFBEE"/>
+</svg>
+      </div>
     </section>
     <section id="catalog" class="grid" aria-label="Watches"></section>
     <section id="stage" class="stage" hidden>
@@ -68,6 +154,7 @@
 
   <button id="totop" class="totop" type="button" aria-label="Back to top">↑</button>
 
-  <script src="app.js?v=3"></script>
+  <script src="clock.js?v=4"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
