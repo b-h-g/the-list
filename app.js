@@ -244,22 +244,27 @@ function maybeKeepOne() {
 function initBrands() {
   const brands = [...new Set(WATCHES.map(w => w.brand))].sort((a, b) => a.localeCompare(b));
   const sel = document.getElementById("brand");
-  brands.forEach(b => {
-    const opt = document.createElement("option");
-    opt.value = b;
-    opt.textContent = b;
-    sel.appendChild(opt);
-  });
-  sel.addEventListener("change", () => {
-    state.brand = sel.value;
-    renderGrid();
-    maybeKeepOne();
-  });
-  document.getElementById("sort").addEventListener("change", e => {
-    state.sort = e.target.value;
-    renderGrid();
-    maybeKeepOne();
-  });
+  if (sel) {
+    brands.forEach(b => {
+      const opt = document.createElement("option");
+      opt.value = b;
+      opt.textContent = b;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener("change", () => {
+      state.brand = sel.value;
+      renderGrid();
+      maybeKeepOne();
+    });
+  }
+  const sort = document.getElementById("sort");
+  if (sort) {
+    sort.addEventListener("change", e => {
+      state.sort = e.target.value;
+      renderGrid();
+      maybeKeepOne();
+    });
+  }
 }
 
 function initViews() {
@@ -390,15 +395,7 @@ function boot() {
     enterOne(lot, { fromHash: true, fade: false });
     return;
   }
-  let saved = "grid";
-  try { saved = localStorage.getItem(STORE_VIEW) || "grid"; } catch (_) {}
-  if (saved === "one") {
-    let id = state.id;
-    try { id = Number(localStorage.getItem(STORE_ID)) || state.id; } catch (_) {}
-    enterOne(id, { replace: true, fade: false });
-  } else {
-    setViewMode("grid");
-  }
+  setViewMode("grid");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
