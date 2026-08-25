@@ -243,16 +243,15 @@ function maybeKeepOne() {
 
 function initBrands() {
   const brands = [...new Set(WATCHES.map(w => w.brand))].sort((a, b) => a.localeCompare(b));
-  const nav = document.getElementById("brands");
-  const all = [{value:"all", label:"All"}, ...brands.map(b => ({value:b, label:b}))];
-  nav.innerHTML = all.map(b =>
-    `<button type="button" class="chip${b.value==="all"?" is-on":""}" data-brand="${b.value}">${b.label}</button>`
-  ).join("");
-  nav.addEventListener("click", e => {
-    const btn = e.target.closest(".chip");
-    if (!btn) return;
-    state.brand = btn.dataset.brand;
-    nav.querySelectorAll(".chip").forEach(c => c.classList.toggle("is-on", c === btn));
+  const sel = document.getElementById("brand");
+  brands.forEach(b => {
+    const opt = document.createElement("option");
+    opt.value = b;
+    opt.textContent = b;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener("change", () => {
+    state.brand = sel.value;
     renderGrid();
     maybeKeepOne();
   });

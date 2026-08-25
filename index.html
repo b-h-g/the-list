@@ -17,18 +17,22 @@
         <button type="button" class="view-btn" data-view="one" id="view-one">One</button>
       </div>
       <span class="sep" aria-hidden="true">·</span>
-      <span id="count" class="count">44</span>
-    </div>
-    <div class="nav-sub">
-      <nav id="brands" class="brands" aria-label="Filter by brand"></nav>
-      <label class="sort-wrap">
+      <label class="chooser">
+        <select id="brand" aria-label="House">
+          <option value="all">All houses</option>
+        </select>
+      </label>
+      <span class="sep" aria-hidden="true">·</span>
+      <label class="chooser">
         <select id="sort" aria-label="Sort">
           <option value="lot">Lot</option>
           <option value="price-asc">Price</option>
           <option value="price-desc">Price, high</option>
-          <option value="brand">Brand</option>
+          <option value="brand">A–Z</option>
         </select>
       </label>
+      <span class="sep" aria-hidden="true">·</span>
+      <span id="count" class="count">44</span>
     </div>
   </header>
 

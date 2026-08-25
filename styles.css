@@ -43,7 +43,9 @@ a { color: inherit; }
   pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 12px;
   padding: 9px 20px 9px 22px;
   background: var(--pill);
   color: var(--pill-ink);
@@ -97,50 +99,42 @@ a { color: inherit; }
   font-weight: 500;
 }
 
-.nav-sub {
-  pointer-events: auto;
+.chooser {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  width: min(920px, 100%);
 }
-.brands {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 5px 14px;
-  width: 100%;
-}
-.chip {
-  background: none;
-  border: 0;
-  padding: 0;
-  font: inherit;
-  font-size: 12px;
-  letter-spacing: -0.01em;
-  color: var(--mute);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.chip:hover { color: var(--ink); }
-.chip.is-on {
-  color: var(--ink);
-  font-weight: 500;
-}
-.sort-wrap select {
+.chooser select {
   appearance: none;
+  -webkit-appearance: none;
   background: none;
   border: 0;
   font: inherit;
-  font-size: 12px;
-  letter-spacing: -0.01em;
-  color: var(--mute);
+  font-size: 13px;
+  letter-spacing: -0.015em;
+  color: var(--pill-ink);
   cursor: pointer;
-  padding: 0;
-  text-align: center;
+  padding: 0 16px 0 0;
+  max-width: 168px;
+  text-overflow: ellipsis;
 }
-.sort-wrap select:hover { color: var(--ink); }
+.chooser::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--pill-mute);
+  border-bottom: 1.5px solid var(--pill-mute);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+.chooser select:hover { color: #fff; }
+.chooser select option {
+  color: #110000;
+  background: #FDFBEE;
+}
 
 .hero {
   max-width: 1280px;
@@ -276,11 +270,6 @@ body.is-one .nav-pill {
   border-color: rgba(253, 251, 238, 0.16);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
 }
-body.is-one .chip { color: rgba(253, 251, 238, 0.48); }
-body.is-one .chip:hover,
-body.is-one .chip.is-on { color: var(--cream); }
-body.is-one .sort-wrap select { color: rgba(253, 251, 238, 0.48); }
-body.is-one .sort-wrap select:hover { color: var(--cream); }
 
 .stage[hidden] { display: none; }
 .stage {
