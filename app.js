@@ -87,7 +87,7 @@ function renderGrid() {
   const list = visible();
   const catalog = document.getElementById("catalog");
   const countEl = document.getElementById("count");
-  countEl.textContent = String(list.length);
+  if (countEl) countEl.textContent = String(list.length);
 
   catalog.innerHTML = list.map(w => {
     const lot = String(w.id).padStart(2, "0");
@@ -241,30 +241,61 @@ function maybeKeepOne() {
   else enterOne(state.id, { fromHash: true, fade: false });
 }
 
+function setHouseLabel() {
+  const label = document.getElementById("house-label");
+  if (label) label.textContent = state.brand === "all" ? "All houses" : state.brand;
+}
+
+function closeHouse() {
+  const menu = document.getElementById("house-menu");
+  const btn = document.getElementById("house-btn");
+  if (!menu || !btn) return;
+  menu.hidden = true;
+  btn.setAttribute("aria-expanded", "false");
+}
+
 function initBrands() {
   const brands = [...new Set(WATCHES.map(w => w.brand))].sort((a, b) => a.localeCompare(b));
-  const sel = document.getElementById("brand");
-  if (sel) {
-    brands.forEach(b => {
-      const opt = document.createElement("option");
-      opt.value = b;
-      opt.textContent = b;
-      sel.appendChild(opt);
-    });
-    sel.addEventListener("change", () => {
-      state.brand = sel.value;
-      renderGrid();
-      maybeKeepOne();
-    });
-  }
-  const sort = document.getElementById("sort");
-  if (sort) {
-    sort.addEventListener("change", e => {
-      state.sort = e.target.value;
-      renderGrid();
-      maybeKeepOne();
-    });
-  }
+  const list = document.getElementById("house-list");
+  const btn = document.getElementById("house-btn");
+  const menu = document.getElementById("house-menu");
+  if (!list || !btn || !menu) return;
+
+  const items = [{value:"all", label:"All houses"}, ...brands.map(b => ({value:b, label:b}))];
+  list.innerHTML = items.map(b =>
+    `<button type="button" class="house-item${b.value==="all"?" is-on":""}" role="option" data-brand="${b.value}">${b.label}</button>`
+  ).join("");
+
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    const open = menu.hidden;
+    menu.hidden = !open;
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  list.addEventListener("click", e => {
+    const item = e.target.closest(".house-item");
+    if (!item) return;
+    state.brand = item.dataset.brand;
+    list.querySelectorAll(".house-item").forEach(el => el.classList.toggle("is-on", el === item));
+    setHouseLabel();
+    closeHouse();
+    renderGrid();
+    maybeKeepOne();
+  });
+  document.querySelector(".house-sort").addEventListener("click", e => {
+    const s = e.target.closest(".sort-btn");
+    if (!s) return;
+    state.sort = s.dataset.sort;
+    document.querySelectorAll(".sort-btn").forEach(el => el.classList.toggle("is-on", el === s));
+    renderGrid();
+    maybeKeepOne();
+  });
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".house")) closeHouse();
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeHouse();
+  });
 }
 
 function initViews() {
