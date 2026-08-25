@@ -13,6 +13,10 @@
       <a class="mark" href="#top">The List</a>
       <span id="count" class="count">44</span>
       <nav id="brands" class="brands" aria-label="Filter by brand"></nav>
+      <div class="views" role="group" aria-label="View">
+        <button type="button" class="view-btn is-on" data-view="grid" id="view-grid">Grid</button>
+        <button type="button" class="view-btn" data-view="one" id="view-one">One</button>
+      </div>
       <label class="sort-wrap">
         <select id="sort" aria-label="Sort">
           <option value="lot">Lot</option>
@@ -30,6 +34,24 @@
       <p class="whisper">Forty-four watches.</p>
     </section>
     <section id="catalog" class="grid" aria-label="Watches"></section>
+    <section id="stage" class="stage" hidden>
+      <div class="stage-frame">
+        <button class="chevron prev" type="button" id="s-prev" aria-label="Previous">‹</button>
+        <figure class="stage-photo" id="s-photo">
+          <img id="s-img" alt="">
+        </figure>
+        <button class="chevron next" type="button" id="s-next" aria-label="Next">›</button>
+      </div>
+      <p id="s-pos" class="stage-pos" aria-live="polite">1 / 44</p>
+      <div class="stage-copy">
+        <p id="s-brand" class="s-brand"></p>
+        <h2 id="s-name"></h2>
+        <p id="s-ref" class="s-ref"></p>
+        <p id="s-price" class="s-price"></p>
+        <a id="s-link" class="learn" target="_blank" rel="noopener noreferrer">Learn more →</a>
+      </div>
+      <button type="button" id="hint" class="hint" hidden>← → to move</button>
+    </section>
   </main>
 
   <footer class="foot">
@@ -37,21 +59,6 @@
   </footer>
 
   <button id="totop" class="totop" type="button" aria-label="Back to top">↑</button>
-
-  <div id="detail" class="detail" hidden>
-    <div class="detail-scrim" data-close></div>
-    <article class="detail-sheet" role="dialog" aria-modal="true" aria-labelledby="d-name">
-      <button class="detail-close" type="button" data-close aria-label="Close">Close</button>
-      <figure class="detail-photo"><img id="d-img" alt=""></figure>
-      <div class="detail-copy">
-        <p id="d-brand" class="d-brand"></p>
-        <h2 id="d-name"></h2>
-        <p id="d-ref" class="d-ref"></p>
-        <p id="d-price" class="d-price"></p>
-        <a id="d-link" class="learn" target="_blank" rel="noopener noreferrer">Learn more</a>
-      </div>
-    </article>
-  </div>
 
   <script src="app.js"></script>
 </body>

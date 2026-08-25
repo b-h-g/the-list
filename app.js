@@ -65,7 +65,11 @@ function shortName(name) {
   return name.replace(/,\s*\d.*$/, "").replace(/\s+\d+\s*mm.*$/i, "").trim();
 }
 
-const state = { brand: "all", sort: "lot" };
+const STORE_VIEW = "the-list-view";
+const STORE_ID = "the-list-id";
+const STORE_HINT = "the-list-hint";
+
+const state = { brand: "all", sort: "lot", view: "grid", id: 1 };
 
 function visible() {
   let list = WATCHES.slice();
@@ -79,7 +83,7 @@ function visible() {
   return list;
 }
 
-function render() {
+function renderGrid() {
   const list = visible();
   const catalog = document.getElementById("catalog");
   const countEl = document.getElementById("count");
@@ -98,6 +102,145 @@ function render() {
   }).join("");
 }
 
+function syncViewButtons() {
+  document.querySelectorAll(".view-btn").forEach(btn => {
+    btn.classList.toggle("is-on", btn.dataset.view === state.view);
+  });
+}
+
+function setViewMode(view) {
+  state.view = view;
+  document.body.classList.toggle("is-one", view === "one");
+  document.getElementById("stage").hidden = view !== "one";
+  syncViewButtons();
+  try { localStorage.setItem(STORE_VIEW, view); } catch (_) {}
+}
+
+function hashLot() {
+  const raw = location.hash.replace(/^#/, "");
+  if (/^\d+$/.test(raw)) return Number(raw);
+  return null;
+}
+
+function writeHash(id, replace) {
+  const dest = id == null ? (location.pathname + location.search) : ("#" + id);
+  if (id != null && location.hash === "#" + id) return;
+  if (id == null && (!location.hash || location.hash === "#" || location.hash === "#top")) return;
+  if (replace) history.replaceState(null, "", dest);
+  else if (id == null) history.pushState(null, "", dest);
+  else location.hash = String(id);
+}
+
+let fadeGen = 0;
+
+function paintOne(w, { fade = true } = {}) {
+  const img = document.getElementById("s-img");
+  const list = visible();
+  const index = list.findIndex(x => x.id === w.id);
+  const token = ++fadeGen;
+
+  const apply = () => {
+    if (token !== fadeGen) return;
+    document.getElementById("s-brand").textContent = w.brand;
+    document.getElementById("s-name").textContent = w.name;
+    const ref = document.getElementById("s-ref");
+    if (w.ref) {
+      ref.textContent = "Ref. " + w.ref;
+      ref.hidden = false;
+    } else {
+      ref.textContent = "";
+      ref.hidden = true;
+    }
+    document.getElementById("s-price").textContent = priceLabel(w);
+    const link = document.getElementById("s-link");
+    if (w.url) {
+      link.href = w.url;
+      link.hidden = false;
+    } else {
+      link.hidden = true;
+    }
+    document.getElementById("s-pos").textContent = (index + 1) + " / " + list.length;
+    img.alt = w.brand + " " + w.name;
+    const nextSrc = w.img || ("images/" + String(w.id).padStart(2, "0") + ".jpg");
+    const show = () => {
+      if (token === fadeGen) img.classList.remove("is-dim");
+    };
+    if (img.getAttribute("src") === nextSrc) {
+      show();
+      return;
+    }
+    img.onload = show;
+    img.onerror = show;
+    img.src = nextSrc;
+    if (img.complete) show();
+  };
+
+  if (fade && img.getAttribute("src")) {
+    img.classList.add("is-dim");
+    setTimeout(apply, 180);
+  } else {
+    apply();
+  }
+
+  const prev = list[(index - 1 + list.length) % list.length];
+  const next = list[(index + 1) % list.length];
+  [prev, next].forEach(item => {
+    if (!item) return;
+    const pre = new Image();
+    pre.src = item.img || ("images/" + String(item.id).padStart(2, "0") + ".jpg");
+  });
+}
+
+function showHint() {
+  const hint = document.getElementById("hint");
+  try {
+    if (localStorage.getItem(STORE_HINT)) {
+      hint.hidden = true;
+      return;
+    }
+  } catch (_) {}
+  hint.hidden = false;
+}
+
+function enterOne(id, { fromHash = false, replace = false, fade = true } = {}) {
+  const list = visible();
+  if (!list.length) return;
+  let w = list.find(x => x.id === id);
+  if (!w) w = WATCHES.find(x => x.id === id && state.brand === "all") || list[0];
+  if (!list.some(x => x.id === w.id)) w = list[0];
+  state.id = w.id;
+  try { localStorage.setItem(STORE_ID, String(w.id)); } catch (_) {}
+  setViewMode("one");
+  paintOne(w, { fade });
+  showHint();
+  if (!fromHash) writeHash(w.id, replace);
+}
+
+function enterGrid({ fromHash = false } = {}) {
+  setViewMode("grid");
+  if (!fromHash) writeHash(null, false);
+}
+
+function step(dir) {
+  const list = visible();
+  if (!list.length) return;
+  let index = list.findIndex(x => x.id === state.id);
+  if (index < 0) index = 0;
+  const next = list[(index + dir + list.length) % list.length];
+  enterOne(next.id, { fade: true });
+}
+
+function maybeKeepOne() {
+  if (state.view !== "one") return;
+  const list = visible();
+  if (!list.length) {
+    enterGrid();
+    return;
+  }
+  if (!list.some(x => x.id === state.id)) enterOne(list[0].id, { fade: true });
+  else enterOne(state.id, { fromHash: true, fade: false });
+}
+
 function initBrands() {
   const brands = [...new Set(WATCHES.map(w => w.brand))].sort((a, b) => a.localeCompare(b));
   const nav = document.getElementById("brands");
@@ -110,54 +253,126 @@ function initBrands() {
     if (!btn) return;
     state.brand = btn.dataset.brand;
     nav.querySelectorAll(".chip").forEach(c => c.classList.toggle("is-on", c === btn));
-    render();
+    renderGrid();
+    maybeKeepOne();
   });
   document.getElementById("sort").addEventListener("change", e => {
     state.sort = e.target.value;
-    render();
+    renderGrid();
+    maybeKeepOne();
   });
 }
 
-function openDetail(id) {
-  const w = WATCHES.find(x => x.id === id);
-  if (!w) return;
-  const lot = String(w.id).padStart(2, "0");
-  document.getElementById("d-img").src = w.img || ("images/" + lot + ".jpg");
-  document.getElementById("d-img").alt = w.brand + " " + w.name;
-  document.getElementById("d-brand").textContent = w.brand;
-  document.getElementById("d-name").textContent = w.name;
-  document.getElementById("d-ref").textContent = w.ref ? lot + "  ·  Ref. " + w.ref : lot;
-  document.getElementById("d-price").textContent = priceLabel(w);
-  const link = document.getElementById("d-link");
-  if (w.url) {
-    link.href = w.url;
-    link.hidden = false;
-  } else {
-    link.hidden = true;
-  }
-  const el = document.getElementById("detail");
-  el.hidden = false;
-  document.body.classList.add("lock");
-  el.querySelector(".detail-close").focus();
-}
+function initViews() {
+  document.querySelector(".views").addEventListener("click", e => {
+    const btn = e.target.closest(".view-btn");
+    if (!btn) return;
+    if (btn.dataset.view === "grid") enterGrid();
+    else {
+      let id = state.id;
+      try { id = Number(localStorage.getItem(STORE_ID)) || state.id; } catch (_) {}
+      enterOne(id, { fade: false });
+    }
+  });
 
-function closeDetail() {
-  document.getElementById("detail").hidden = true;
-  document.body.classList.remove("lock");
-}
-
-function initDetail() {
   document.getElementById("catalog").addEventListener("click", e => {
     const tile = e.target.closest(".tile");
     if (!tile) return;
-    openDetail(Number(tile.dataset.id));
+    enterOne(Number(tile.dataset.id), { fade: false });
   });
-  document.getElementById("detail").addEventListener("click", e => {
-    if (e.target.hasAttribute("data-close")) closeDetail();
+
+  document.getElementById("s-prev").addEventListener("click", () => step(-1));
+  document.getElementById("s-next").addEventListener("click", () => step(1));
+
+  document.getElementById("hint").addEventListener("click", () => {
+    document.getElementById("hint").hidden = true;
+    try { localStorage.setItem(STORE_HINT, "1"); } catch (_) {}
   });
+
+  document.querySelector(".mark").addEventListener("click", e => {
+    if (state.view === "one") {
+      e.preventDefault();
+      enterGrid();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+}
+
+function initKeys() {
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape") closeDetail();
+    if (e.target && (e.target.tagName === "SELECT" || e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+    if (state.view !== "one") return;
+    if (e.key === "Escape") {
+      enterGrid();
+      return;
+    }
+    if (e.key === "ArrowLeft" || e.key === "j" || e.key === "J") {
+      e.preventDefault();
+      step(-1);
+    } else if (e.key === "ArrowRight" || e.key === "k" || e.key === "K") {
+      e.preventDefault();
+      step(1);
+    }
   });
+}
+
+function initSwipe() {
+  const photo = document.getElementById("s-photo");
+  let startX = 0;
+  let startY = 0;
+  let tracking = false;
+
+  photo.addEventListener("pointerdown", e => {
+    tracking = true;
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+  photo.addEventListener("pointerup", e => {
+    if (!tracking) return;
+    tracking = false;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    step(dx < 0 ? 1 : -1);
+  });
+  photo.addEventListener("pointercancel", () => { tracking = false; });
+
+  photo.addEventListener("touchstart", e => {
+    if (!e.changedTouches.length) return;
+    startX = e.changedTouches[0].clientX;
+    startY = e.changedTouches[0].clientY;
+  }, { passive: true });
+  photo.addEventListener("touchend", e => {
+    if (!e.changedTouches.length) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    step(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  let lastWheel = 0;
+  photo.addEventListener("wheel", e => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 10) return;
+    e.preventDefault();
+    const now = Date.now();
+    if (now - lastWheel < 420) return;
+    lastWheel = now;
+    step(e.deltaX > 0 ? 1 : -1);
+  }, { passive: false });
+}
+
+function initHash() {
+  const onHash = () => {
+    const lot = hashLot();
+    if (lot && WATCHES.some(w => w.id === lot)) {
+      if (state.view === "one" && state.id === lot) return;
+      enterOne(lot, { fromHash: true, fade: state.view === "one" });
+    } else if (state.view === "one") {
+      enterGrid({ fromHash: true });
+    }
+  };
+  window.addEventListener("hashchange", onHash);
+  window.addEventListener("popstate", onHash);
 }
 
 function initToTop() {
@@ -169,9 +384,30 @@ function initToTop() {
   btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 }
 
+function boot() {
+  renderGrid();
+  const lot = hashLot();
+  if (lot && WATCHES.some(w => w.id === lot)) {
+    enterOne(lot, { fromHash: true, fade: false });
+    return;
+  }
+  let saved = "grid";
+  try { saved = localStorage.getItem(STORE_VIEW) || "grid"; } catch (_) {}
+  if (saved === "one") {
+    let id = state.id;
+    try { id = Number(localStorage.getItem(STORE_ID)) || state.id; } catch (_) {}
+    enterOne(id, { replace: true, fade: false });
+  } else {
+    setViewMode("grid");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initBrands();
-  initDetail();
+  initViews();
+  initKeys();
+  initSwipe();
+  initHash();
   initToTop();
-  render();
+  boot();
 });
