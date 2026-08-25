@@ -9,14 +9,18 @@
 </head>
 <body>
   <header class="nav">
-    <div class="nav-inner">
+    <div class="nav-pill">
       <a class="mark" href="#top">The List</a>
-      <span id="count" class="count">44</span>
-      <nav id="brands" class="brands" aria-label="Filter by brand"></nav>
+      <span class="sep" aria-hidden="true">·</span>
       <div class="views" role="group" aria-label="View">
         <button type="button" class="view-btn is-on" data-view="grid" id="view-grid">Grid</button>
         <button type="button" class="view-btn" data-view="one" id="view-one">One</button>
       </div>
+      <span class="sep" aria-hidden="true">·</span>
+      <span id="count" class="count">44</span>
+    </div>
+    <div class="nav-sub">
+      <nav id="brands" class="brands" aria-label="Filter by brand"></nav>
       <label class="sort-wrap">
         <select id="sort" aria-label="Sort">
           <option value="lot">Lot</option>
