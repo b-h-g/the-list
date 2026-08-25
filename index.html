@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The List — Benjamin Gruber</title>
+  <meta name="description" content="A personal watch list. Forty-four lots. Listed retail as noted by Benjamin Gruber.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="wordmark" href="#top">
+        <em>The List</em>
+        <span>Benjamin Gruber</span>
+      </a>
+      <div class="stats">
+        <span id="count"><strong>44</strong> lots</span>
+        <span id="total">listed from $2,222,522</span>
+      </div>
+      <div class="controls">
+        <label>
+          <select id="brand" aria-label="Filter by brand">
+            <option value="all">All houses</option>
+          </select>
+        </label>
+        <label>
+          <select id="sort" aria-label="Sort lots">
+            <option value="lot">Lot number</option>
+            <option value="price-asc">Price, low to high</option>
+            <option value="price-desc">Price, high to low</option>
+            <option value="brand">Brand</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="sub">A collector’s catalogue · August 2026</p>
+      <h1>The List</h1>
+      <p class="lede">Forty-four watches, noted with official retail as listed. Not a shop. Not a market. A private inventory of desire.</p>
+    </section>
+    <div class="rule"><hr></div>
+    <section id="catalog" aria-label="Watch lots"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>The List</strong>
+        Prices as listed by Benjamin Gruber, August 2026. These are not live market quotations.
+      </div>
+      <div>
+        Range pieces (A. Lange &amp; Söhne) are shown as published lows and highs.
+        The running total uses range lows and is labeled listed from.
+      </div>
+    </div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
