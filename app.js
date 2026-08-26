@@ -82,7 +82,7 @@ const STORE_VIEW = "the-list-view";
 const STORE_ID = "the-list-id";
 const STORE_HINT = "the-list-hint";
 
-const state = { brand: "all", sort: "lot", view: "grid", id: 1 };
+const state = { brand: "all", sort: "price-asc", view: "grid", id: 1 };
 
 function visible() {
   let list = WATCHES.slice();
@@ -90,8 +90,12 @@ function visible() {
   list.sort((a, b) => {
     const av = sortValue(a, state.sort);
     const bv = sortValue(b, state.sort);
-    if (typeof av === "number") return av - bv;
-    return String(av).localeCompare(String(bv));
+    if (typeof av === "number") {
+      if (av !== bv) return av - bv;
+      return a.id - b.id;
+    }
+    const c = String(av).localeCompare(String(bv));
+    return c || a.id - b.id;
   });
   return list;
 }
@@ -109,7 +113,7 @@ function renderGrid() {
     return `
       <button class="tile" type="button" data-id="${w.id}" aria-label="${w.brand} ${w.name}">
         <div class="tile-photo"><img src="${img}" alt="" loading="lazy"${scale}></div>
-        <p class="tile-brand">${w.brand}<span class="tile-lot"> ${lot}</span></p>
+        <p class="tile-brand">${w.brand}</p>
         <p class="tile-name">${shortName(w.name)}</p>
         <p class="tile-price">${priceLabel(w)}</p>
         ${specLine(w) ? `<p class="tile-specs">${specLine(w)}</p>` : ""}
