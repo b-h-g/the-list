@@ -349,6 +349,15 @@ main { position: relative; z-index: 1; }
   font-weight: 400;
   letter-spacing: 0;
 }
+.tile-specs {
+  margin: 5px 6px 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.018em;
+  line-height: 1.3;
+  color: rgba(17, 0, 0, 0.38);
+}
+
 
 .foot {
   padding: 16px 28px 72px;
@@ -498,6 +507,16 @@ body.is-one .s-ref { color: rgba(253, 251, 238, 0.48); }
   font-size: 21px;
   letter-spacing: -0.02em;
 }
+.s-specs {
+  margin: 14px 0 0;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--mute);
+}
+body.is-one .s-specs { color: rgba(253, 251, 238, 0.44); }
+.s-specs[hidden] { display: none; }
+
 .learn {
   display: inline-block;
   margin-top: 26px;
