@@ -126,6 +126,7 @@ function setViewMode(view) {
   document.body.classList.toggle("is-one", view === "one");
   document.getElementById("stage").hidden = view !== "one";
   syncViewButtons();
+  if (view === "one") window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   try { localStorage.setItem(STORE_VIEW, view); } catch (_) {}
 }
 
@@ -197,12 +198,7 @@ function paintOne(w, { fade = true } = {}) {
     if (img.complete) show();
   };
 
-  if (fade && img.getAttribute("src")) {
-    img.classList.add("is-dim");
-    setTimeout(apply, 180);
-  } else {
-    apply();
-  }
+  apply();
 
   const prev = list[(index - 1 + list.length) % list.length];
   const next = list[(index + 1) % list.length];
@@ -442,6 +438,7 @@ function initToTop() {
 }
 
 function boot() {
+  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (_) {}
   renderGrid();
   const lot = hashLot();
   if (lot && WATCHES.some(w => w.id === lot)) {
