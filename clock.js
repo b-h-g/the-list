@@ -71,8 +71,7 @@
     { sel: ".mv-third", ox: 508, oy: 478, ratio: 2.4 },
     { sel: ".mv-fourth", ox: 400, oy: 548, ratio: 1.55 },
     { sel: ".mv-escape", ox: 512, oy: 332, ratio: 4.2 },
-    { sel: ".mv-pinion", ox: 698, oy: 400, ratio: 3.1 },
-    { sel: ".mv-crown", ox: 783, oy: 400, ratio: 2.2 }
+    { sel: ".mv-pinion", ox: 698, oy: 400, ratio: 3.1 }
   ];
 
   function initMovementScroll() {
@@ -113,11 +112,15 @@
         if (!el) continue;
         el.style.transformBox = "view-box";
         el.style.transformOrigin = g.ox + "px " + g.oy + "px";
-        if (g.sel === ".mv-crown") {
-          el.style.transform = "perspective(90px) rotateX(" + (a * g.ratio).toFixed(3) + "deg)";
-        } else {
-          el.style.transform = "rotate(" + (a * g.ratio).toFixed(3) + "deg)";
-        }
+        el.style.transform = "rotate(" + (a * g.ratio).toFixed(3) + "deg)";
+      }
+      const knurl = svg.querySelector(".mv-crown-knurl");
+      if (knurl) {
+        const pitch = 5;
+        const shift = ((a * 0.12) % pitch + pitch) % pitch;
+        knurl.style.transformBox = "view-box";
+        knurl.style.transformOrigin = "783px 400px";
+        knurl.style.transform = "translate(0, " + shift.toFixed(3) + "px)";
       }
       const bal = svg.querySelector(".mv-balance");
       if (bal) {
@@ -167,7 +170,7 @@
       boot();
       return;
     }
-    fetch("movement.svg?v=8")
+    fetch("movement.svg?v=9")
       .then(function (r) { return r.ok ? r.text() : Promise.reject(); })
       .then(function (svg) {
         host.innerHTML = svg;

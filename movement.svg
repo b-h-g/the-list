@@ -1,4 +1,9 @@
 <svg class="movement-svg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <clipPath id="crown-clip">
+      <rect x="777" y="387" width="12" height="26" rx="2.5"/>
+    </clipPath>
+  </defs>
   <!-- original schematic; not a commercial calibre -->
   <g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round">
     <circle cx="400.000" cy="400.000" r="318.000" stroke-width="1.1"/>
@@ -90,7 +95,9 @@
       </g>
       <g class="mv-crown">
       <rect x="776" y="386" width="14" height="28" rx="3" stroke-width="1.1"/>
-      <path d="M778,390 h10 M778,395 h10 M778,400 h10 M778,405 h10 M778,410 h10" stroke-width="0.55" opacity="0.7"/>
+      <g class="mv-crown-knurl" clip-path="url(#crown-clip)">
+        <path d="M778,372 h10 M778,377 h10 M778,382 h10 M778,387 h10 M778,392 h10 M778,397 h10 M778,402 h10 M778,407 h10 M778,412 h10 M778,417 h10 M778,422 h10 M778,427 h10" stroke-width="0.55" opacity="0.7"/>
+      </g>
       </g>
     </g>
   </g>
