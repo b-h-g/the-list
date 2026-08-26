@@ -103,12 +103,7 @@
       host.style.opacity = String(op);
       host.style.visibility = one ? "hidden" : "visible";
 
-      const px = frozen ? 0 : Math.sin(y * 0.0022) * 18 + vel * 0.014;
-      const py = y * 0.055;
-      const rot = frozen ? 0 : Math.sin(y * 0.00135) * 3.6 + vel * 0.002;
-      host.style.transform =
-        "translate(-50%, calc(-50% + " + py.toFixed(2) + "px)) translate(" +
-        px.toFixed(2) + "px, 0) rotate(" + rot.toFixed(3) + "deg)";
+      host.style.transform = "translate(-50%, -50%)";
 
       if (!svg) return;
       const a = frozen ? y * 0.14 : angle;
@@ -118,7 +113,11 @@
         if (!el) continue;
         el.style.transformBox = "view-box";
         el.style.transformOrigin = g.ox + "px " + g.oy + "px";
-        el.style.transform = "rotate(" + (a * g.ratio).toFixed(3) + "deg)";
+        if (g.sel === ".mv-crown") {
+          el.style.transform = "perspective(90px) rotateX(" + (a * g.ratio).toFixed(3) + "deg)";
+        } else {
+          el.style.transform = "rotate(" + (a * g.ratio).toFixed(3) + "deg)";
+        }
       }
       const bal = svg.querySelector(".mv-balance");
       if (bal) {
@@ -168,7 +167,7 @@
       boot();
       return;
     }
-    fetch("movement.svg?v=5")
+    fetch("movement.svg?v=8")
       .then(function (r) { return r.ok ? r.text() : Promise.reject(); })
       .then(function (svg) {
         host.innerHTML = svg;
