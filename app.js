@@ -118,7 +118,7 @@ function renderGrid() {
         <p class="tile-brand">${w.brand}</p>
         <p class="tile-name">${shortName(w.name)}</p>
         <p class="tile-price">${priceLabel(w)}</p>
-        ${specLine(w) ? `<p class="tile-specs">${specLine(w)}</p>` : ""}
+        <p class="tile-specs">${specLine(w)}</p>
       </button>`;
   }).join("");
 }
