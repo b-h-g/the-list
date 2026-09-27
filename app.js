@@ -118,7 +118,7 @@ function renderGrid() {
         <p class="tile-brand">${w.brand}</p>
         <p class="tile-name">${shortName(w.name)}</p>
         <p class="tile-price">${priceLabel(w)}</p>
-        ${specLine(w) ? `<p class="tile-specs">${specLine(w)}</p>` : ""}
+        <p class="tile-specs">${specLine(w)}</p>
       </button>`;
   }).join("");
 }
@@ -129,12 +129,37 @@ function syncViewButtons() {
   });
 }
 
+let gridScrollY = 0;
+
+function rememberGridScroll() {
+  gridScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+}
+
+function restoreGridScroll() {
+  const y = gridScrollY;
+  const apply = () => {
+    const root = document.documentElement;
+    const prev = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, y);
+    root.style.scrollBehavior = prev;
+  };
+  apply();
+  requestAnimationFrame(apply);
+}
+
 function setViewMode(view) {
   state.view = view;
   document.body.classList.toggle("is-one", view === "one");
   document.getElementById("stage").hidden = view !== "one";
   syncViewButtons();
-  if (view === "one") window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  if (view === "one") {
+    const root = document.documentElement;
+    const prev = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, 0);
+    root.style.scrollBehavior = prev;
+  }
   try { localStorage.setItem(STORE_VIEW, view); } catch (_) {}
 }
 
@@ -229,6 +254,7 @@ function showHint() {
 }
 
 function enterOne(id, { fromHash = false, replace = false, fade = true } = {}) {
+  if (state.view !== "one") rememberGridScroll();
   const list = visible();
   if (!list.length) return;
   let w = list.find(x => x.id === id);
@@ -243,8 +269,10 @@ function enterOne(id, { fromHash = false, replace = false, fade = true } = {}) {
 }
 
 function enterGrid({ fromHash = false } = {}) {
+  const returning = state.view === "one";
   setViewMode("grid");
   if (!fromHash) writeHash(null, false);
+  if (returning) restoreGridScroll();
 }
 
 function step(dir) {
@@ -354,7 +382,6 @@ function initViews() {
     if (state.view === "one") {
       e.preventDefault();
       enterGrid();
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });
 }
