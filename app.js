@@ -411,43 +411,66 @@ function initSwipe() {
   let startX = 0;
   let startY = 0;
   let tracking = false;
+  let pointerId = null;
+
+  const endSwipe = (x, y) => {
+    tracking = false;
+    pointerId = null;
+    const dx = x - startX;
+    const dy = y - startY;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+    step(dx < 0 ? 1 : -1);
+  };
 
   photo.addEventListener("pointerdown", e => {
+    if (tracking) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
     tracking = true;
+    pointerId = e.pointerId;
     startX = e.clientX;
     startY = e.clientY;
   });
   photo.addEventListener("pointerup", e => {
-    if (!tracking) return;
-    tracking = false;
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-    step(dx < 0 ? 1 : -1);
+    if (!tracking || e.pointerId !== pointerId) return;
+    endSwipe(e.clientX, e.clientY);
   });
-  photo.addEventListener("pointercancel", () => { tracking = false; });
+  photo.addEventListener("pointercancel", e => {
+    if (pointerId != null && e.pointerId !== pointerId) return;
+    tracking = false;
+    pointerId = null;
+  });
 
-  photo.addEventListener("touchstart", e => {
-    if (!e.changedTouches.length) return;
-    startX = e.changedTouches[0].clientX;
-    startY = e.changedTouches[0].clientY;
-  }, { passive: true });
-  photo.addEventListener("touchend", e => {
-    if (!e.changedTouches.length) return;
-    const dx = e.changedTouches[0].clientX - startX;
-    const dy = e.changedTouches[0].clientY - startY;
-    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-    step(dx < 0 ? 1 : -1);
-  }, { passive: true });
+  // Pointer events already report a finger swipe. Listening for touch as well
+  // stepped twice, so a swipe from #32 landed on #34.
+  if (typeof PointerEvent !== "function") {
+    photo.addEventListener("touchstart", e => {
+      if (!e.changedTouches.length) return;
+      tracking = true;
+      startX = e.changedTouches[0].clientX;
+      startY = e.changedTouches[0].clientY;
+    }, { passive: true });
+    photo.addEventListener("touchend", e => {
+      if (!tracking || !e.changedTouches.length) return;
+      endSwipe(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+    }, { passive: true });
+  }
 
-  let lastWheel = 0;
+  // One trackpad flick keeps sending wheel events well past a fixed cutoff.
+  // Step on the first movement, then ignore the rest until the flick goes quiet.
+  let wheeling = false;
+  let wheelQuiet = 0;
   photo.addEventListener("wheel", e => {
-    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 10) return;
+    const absX = Math.abs(e.deltaX);
+    const absY = Math.abs(e.deltaY);
+    if (absX <= absY || absX === 0) return;
     e.preventDefault();
-    const now = Date.now();
-    if (now - lastWheel < 420) return;
-    lastWheel = now;
-    step(e.deltaX > 0 ? 1 : -1);
+    if (!wheeling && absX >= 10) {
+      wheeling = true;
+      step(e.deltaX > 0 ? 1 : -1);
+    }
+    if (!wheeling) return;
+    clearTimeout(wheelQuiet);
+    wheelQuiet = setTimeout(() => { wheeling = false; }, 240);
   }, { passive: false });
 }
 
